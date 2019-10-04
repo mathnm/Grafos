@@ -1,6 +1,7 @@
 package trab2;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Grafo {
@@ -10,6 +11,13 @@ public class Grafo {
     ArrayList<String> arestasString = new ArrayList<String>();
 	public boolean orientado;
 	public boolean valorado;
+	
+	//Dijkstra
+	String djik = "DIJKSTRA:"+"\n";
+	List<Vertice> naoVisitados = new ArrayList<Vertice>();
+	Vertice atual = new Vertice(null);
+	List<Vertice> menorCaminho = new ArrayList<Vertice>();
+	
 	
     public Grafo() {
         vertices = new ArrayList<Vertice>();
@@ -176,6 +184,54 @@ public class Grafo {
 		
     }
     
+    
+    public String dijkstra(Grafo g, Vertice s) {
+		for (int i = 0; i < g.vertices.size(); i++) {
+			if(g.vertices.get(i) == s) {
+				g.vertices.get(i).distancia = 0;
+				naoVisitados.add(g.vertices.get(i));
+			}else {
+				g.vertices.get(i).distancia = 9999;
+				naoVisitados.add(g.vertices.get(i));
+			}
+		}
+		
+		while(!naoVisitados.isEmpty()) {
+			atual = naoVisitados.get(0);
+			naoVisitados.remove(0);
+			
+			for (int i = 0; i < atual.verticesAdj.size(); i++) {
+				for (int j = 0; j < atual.adj.size(); j++) {
+					if(!orientado) { //Se não for orientado, o vértice de origem também é considerado adjacente
+						if(atual.adj.get(j).destino.equals(atual.verticesAdj.get(i)) || atual.adj.get(j).origem.equals(atual.verticesAdj.get(i))) {
+							if(atual.verticesAdj.get(i).distancia > atual.distancia + atual.adj.get(i).valor) {
+								atual.verticesAdj.get(i).distancia = atual.distancia + atual.adj.get(i).valor;
+								atual.verticesAdj.get(i).anterior = atual;
+							}
+						}
+					}else {
+						if(atual.adj.get(j).destino.equals(atual.verticesAdj.get(i))) {
+							if(atual.verticesAdj.get(i).distancia > atual.distancia + atual.adj.get(j).valor) {
+								atual.verticesAdj.get(i).distancia = atual.distancia + atual.adj.get(j).valor;
+								atual.verticesAdj.get(i).anterior = atual;
+							}
+						}
+					}
+				}
+			}			
+			Collections.sort(naoVisitados);
+		}		
+		
+		for (int i = 0; i < g.vertices.size(); i++) {
+			if(!g.vertices.get(i).equals(s)) {
+				djik += s.nome+"--("+g.vertices.get(i).distancia+")-->"+g.vertices.get(i).nome+"\n";
+			}
+		}
+		
+		return djik;
+		
+    }
+    
     public String toString() {
     	String r = "";
         
@@ -189,8 +245,8 @@ public class Grafo {
         matrizDeAdj();
         
 		//MATRIZ DE INCIDÊNCIA
-        matrizDeIncid();		
-		
+        matrizDeIncid();
+        
         return r;
     }
     

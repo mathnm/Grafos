@@ -75,5 +75,13 @@ public class Main {
 				System.out.println(g);
 			}         
 		}
-	}
+        
+        String strvertices = "";
+        for (int i = 0; i < g.vertices.size(); i++) {
+			strvertices += g.vertices.get(i).nome+"\n";
+		}
+        
+        System.out.println(g.dijkstra(g, g.vertices.get(Integer.parseInt(JOptionPane.showInputDialog("Qual vértice deseja utilizar como origem?"+ "\n" + strvertices))-1)));
+        
+    }
 }
