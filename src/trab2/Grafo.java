@@ -184,6 +184,15 @@ public class Grafo {
 		
     }
     
+    public static List<String> getShortestPathTo(Vertice target)
+    {
+        List<String> path = new ArrayList<String>();
+        for (Vertice v = target; v != null; v = v.anterior)
+            path.add(v.nome);
+
+        Collections.reverse(path);
+        return path;
+    }
     
     public String dijkstra(Grafo g, Vertice s) {
 		for (int i = 0; i < g.vertices.size(); i++) {
@@ -202,13 +211,13 @@ public class Grafo {
 			
 			for (int i = 0; i < atual.verticesAdj.size(); i++) {
 				for (int j = 0; j < atual.adj.size(); j++) {
-					if(!orientado) { //Se não for orientado, o vértice de origem também é considerado adjacente
+					if(!orientado) { //Se não for orientado, o vértice de origem do objeto aresta também é considerado adjacente
 						if(atual.adj.get(j).destino.equals(atual.verticesAdj.get(i)) || atual.adj.get(j).origem.equals(atual.verticesAdj.get(i))) {
 							if(atual.verticesAdj.get(i).distancia > atual.distancia + atual.adj.get(i).valor) {
 								atual.verticesAdj.get(i).distancia = atual.distancia + atual.adj.get(i).valor;
 								atual.verticesAdj.get(i).anterior = atual;
 							}
-						}
+						}						
 					}else {
 						if(atual.adj.get(j).destino.equals(atual.verticesAdj.get(i))) {
 							if(atual.verticesAdj.get(i).distancia > atual.distancia + atual.adj.get(j).valor) {
@@ -216,15 +225,17 @@ public class Grafo {
 								atual.verticesAdj.get(i).anterior = atual;
 							}
 						}
-					}
+					}					
 				}
-			}			
+			}		
+			
 			Collections.sort(naoVisitados);
-		}		
+		}	
 		
 		for (int i = 0; i < g.vertices.size(); i++) {
 			if(!g.vertices.get(i).equals(s)) {
-				djik += s.nome+"--("+g.vertices.get(i).distancia+")-->"+g.vertices.get(i).nome+"\n";
+				List<String> path = getShortestPathTo(g.vertices.get(i));
+				djik += "Distância da origem até vértice " + g.vertices.get(i).nome + ": " + g.vertices.get(i).distancia+"  --  Caminho mínimo: " + path+"\n";
 			}
 		}
 		
