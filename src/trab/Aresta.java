@@ -1,4 +1,4 @@
-package trab2;
+package trab;
 
 public class Aresta {
     Vertice origem;

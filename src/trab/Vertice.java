@@ -1,4 +1,4 @@
-package trab2;
+package trab;
 
 import java.util.ArrayList;
 import java.util.List;

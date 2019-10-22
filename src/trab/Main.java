@@ -1,4 +1,4 @@
-package trab2;
+package trab;
 
 import javax.swing.JOptionPane;
 
