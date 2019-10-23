@@ -81,7 +81,15 @@ public class Main {
 			strvertices += g.vertices.get(i).nome+"\n";
 		}
         
-        System.out.println(g.dijkstra(g, g.vertices.get(Integer.parseInt(JOptionPane.showInputDialog("Qual vértice deseja utilizar como origem?"+ "\n" + strvertices))-1)));
+        System.out.println(g.dijkstra(g, g.vertices.get(Integer.parseInt(JOptionPane.showInputDialog("Dijkstra \n"+"Qual vértice deseja utilizar como origem?"+ "\n" + strvertices))-1)));
+        
+        if (!g.orientado) {
+        	System.out.println(g.kruskal(g));
+        	System.out.println(g.primJarnik(g, g.vertices.get(Integer.parseInt(JOptionPane.showInputDialog("Prim-Jarnik \n"+"Qual vértice deseja utilizar como origem?"+ "\n" + strvertices))-1)));
+        } else {
+        	System.out.println("Kruskal e Prim-Jarnik disponível apenas para grafos não orientados!");
+        }
+       
         
     }
 }

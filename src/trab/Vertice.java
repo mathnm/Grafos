@@ -1,7 +1,9 @@
 package trab;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Vertice implements Comparable<Vertice>{
     String nome;
@@ -10,6 +12,7 @@ public class Vertice implements Comparable<Vertice>{
     List<String> historico;
     List<Aresta> adj;
     List<Vertice> verticesAdj;
+    Set<Vertice> conjVertice = new HashSet<Vertice>();
 
     Vertice(String nome) {
         this.nome = nome;
@@ -17,6 +20,7 @@ public class Vertice implements Comparable<Vertice>{
         this.distancia = 0;
         this.adj = new ArrayList<Aresta>();
         this.verticesAdj = new ArrayList<Vertice>();
+        this.conjVertice.add(this);
     }
 
     void addAdj(Aresta e) {
@@ -25,7 +29,7 @@ public class Vertice implements Comparable<Vertice>{
     
     void addVerticeAdj(Vertice v) {
     	verticesAdj.add(v);
-    }    
+    }
 
 	public int getDistancia() {
 		return distancia;

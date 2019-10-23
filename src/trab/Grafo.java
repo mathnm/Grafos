@@ -2,7 +2,9 @@ package trab;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Grafo {
 
@@ -14,9 +16,13 @@ public class Grafo {
 	
 	//Dijkstra
 	String djik = "DIJKSTRA:"+"\n";
-	List<Vertice> naoVisitados = new ArrayList<Vertice>();
+	//List<Vertice> naoVisitados = new ArrayList<Vertice>();
 	Vertice atual = new Vertice(null);
 	List<Vertice> menorCaminho = new ArrayList<Vertice>();
+	
+	//List<Vertice> visitados = new ArrayList<Vertice>(); //Prim-Jarnik
+	String prim = "PRIM-JARNIK:"+"\n";
+	
 	
 	
     public Grafo() {
@@ -194,7 +200,9 @@ public class Grafo {
         return path;
     }
     
+    //DJIKSTRA
     public String dijkstra(Grafo g, Vertice s) {
+    	List<Vertice> naoVisitados = new ArrayList<Vertice>();
 		for (int i = 0; i < g.vertices.size(); i++) {
 			if(g.vertices.get(i) == s) {
 				g.vertices.get(i).distancia = 0;
@@ -241,6 +249,79 @@ public class Grafo {
 		
 		return djik;
 		
+    }
+    
+    //PRIM-JARNIK
+    public String primJarnik(Grafo g, Vertice s) {
+    	List<Vertice> naoVisitados = new ArrayList<Vertice>();
+    	List<Vertice> visitados = new ArrayList<Vertice>(); //Prim-Jarnik
+    	int custo = 0;
+    	
+		for (int i = 0; i < g.vertices.size(); i++) {
+			if(g.vertices.get(i) == s) {
+				g.vertices.get(i).distancia = 0;
+				naoVisitados.add(g.vertices.get(i));
+			}else {
+				g.vertices.get(i).distancia = 9999;
+				naoVisitados.add(g.vertices.get(i));
+			}
+		}
+		
+		while(!naoVisitados.isEmpty()) {
+			Collections.sort(naoVisitados);
+			atual = naoVisitados.get(0);
+			naoVisitados.remove(0);	
+			visitados.add(atual);
+			
+			for (int i = 0; i < atual.verticesAdj.size(); i++) {
+				for (int j = 0; j < atual.adj.size(); j++) {
+					if(!visitados.contains(atual.verticesAdj.get(i))) {
+						if(atual.adj.get(j).destino.equals(atual.verticesAdj.get(i)) || atual.adj.get(j).origem.equals(atual.verticesAdj.get(i))) { //Verifica se a aresta pertence aos vértices
+							if(atual.verticesAdj.get(i).distancia > atual.adj.get(i).valor) {
+								atual.verticesAdj.get(i).distancia = atual.adj.get(i).valor;
+								atual.verticesAdj.get(i).anterior = atual;
+							}
+						}
+					}										
+				}
+			}		
+		}
+		
+		for (int i = 0; i < visitados.size(); i++) {
+			custo += visitados.get(i).distancia;
+			if(!visitados.get(i).equals(s)) {
+				prim += visitados.get(i).anterior.nome+" -> "+visitados.get(i).nome+"\n";	
+			}						
+		}
+		prim += "\n" + "Custo total: "+custo;
+		return prim;
+    }
+    
+    //KRUSKAL
+    public String kruskal (Grafo g) {
+    	Set<Vertice> conjVertices = new HashSet<Vertice>();
+    	
+    	String arvoreMinima = "KRUSKAL"+"\n";
+    	int custo = 0;
+    	
+    	Collections.sort(arestas);
+    	for (int i = 0; i < arestas.size(); i++) {
+    		if(conjVertices.contains(arestas.get(i).origem)) {
+				arestas.get(i).origem.conjVertice = conjVertices;
+			}
+    		if(conjVertices.contains(arestas.get(i).destino)) {
+				arestas.get(i).destino.conjVertice = conjVertices;
+			}
+    		if(!arestas.get(i).origem.conjVertice.equals(arestas.get(i).destino.conjVertice) || !arestas.get(i).destino.conjVertice.equals(arestas.get(i).origem.conjVertice)) {
+				arestas.get(i).origem.conjVertice.addAll(arestas.get(i).destino.conjVertice); //adiciona o vértice destino ao conjunto do vertice da origem
+				arestas.get(i).destino.conjVertice.addAll(arestas.get(i).origem.conjVertice); //adiciona o vértice origem ao conjunto do vertice do destino
+				conjVertices.addAll(arestas.get(i).origem.conjVertice);
+				arvoreMinima += arestas.get(i).origem.nome+" -> "+ arestas.get(i).destino.nome + "\n";
+				custo += arestas.get(i).valor;
+			}
+		}
+    	arvoreMinima += "Custo total da árvore: "+custo+"\n";
+    	return arvoreMinima;
     }
     
     public String toString() {
