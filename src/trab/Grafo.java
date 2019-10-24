@@ -254,7 +254,7 @@ public class Grafo {
     //PRIM-JARNIK
     public String primJarnik(Grafo g, Vertice s) {
     	List<Vertice> naoVisitados = new ArrayList<Vertice>();
-    	List<Vertice> visitados = new ArrayList<Vertice>(); //Prim-Jarnik
+    	List<Vertice> visitados = new ArrayList<Vertice>();
     	int custo = 0;
     	
 		for (int i = 0; i < g.vertices.size(); i++) {
@@ -293,7 +293,7 @@ public class Grafo {
 				prim += visitados.get(i).anterior.nome+" -> "+visitados.get(i).nome+"\n";	
 			}						
 		}
-		prim += "\n" + "Custo total: "+custo;
+		prim += "Custo total: "+custo;
 		return prim;
     }
     
@@ -306,19 +306,21 @@ public class Grafo {
     	
     	Collections.sort(arestas);
     	for (int i = 0; i < arestas.size(); i++) {
-    		if(conjVertices.contains(arestas.get(i).origem)) {
-				arestas.get(i).origem.conjVertice = conjVertices;
-			}
-    		if(conjVertices.contains(arestas.get(i).destino)) {
-				arestas.get(i).destino.conjVertice = conjVertices;
-			}
-    		if(!arestas.get(i).origem.conjVertice.equals(arestas.get(i).destino.conjVertice) || !arestas.get(i).destino.conjVertice.equals(arestas.get(i).origem.conjVertice)) {
+    		if((!conjVertices.contains(arestas.get(i).origem) || !conjVertices.contains(arestas.get(i).destino))) {
 				arestas.get(i).origem.conjVertice.addAll(arestas.get(i).destino.conjVertice); //adiciona o vértice destino ao conjunto do vertice da origem
 				arestas.get(i).destino.conjVertice.addAll(arestas.get(i).origem.conjVertice); //adiciona o vértice origem ao conjunto do vertice do destino
-				conjVertices.addAll(arestas.get(i).origem.conjVertice);
+				conjVertices.add(arestas.get(i).origem);
+				conjVertices.add(arestas.get(i).destino);
 				arvoreMinima += arestas.get(i).origem.nome+" -> "+ arestas.get(i).destino.nome + "\n";
 				custo += arestas.get(i).valor;
-			}
+			}else if(arestas.get(i).origem.conjVertice.equals(arestas.get(i).destino.conjVertice)) {
+				arestas.get(i).origem.conjVertice.addAll(arestas.get(i).destino.conjVertice); //adiciona o vértice destino ao conjunto do vertice da origem
+				arestas.get(i).destino.conjVertice.addAll(arestas.get(i).origem.conjVertice); //adiciona o vértice origem ao conjunto do vertice do destino
+				conjVertices.add(arestas.get(i).origem);
+				conjVertices.add(arestas.get(i).destino);
+				arvoreMinima += arestas.get(i).origem.nome+" -> "+ arestas.get(i).destino.nome + "\n";
+				custo += arestas.get(i).valor;
+    		}
 		}
     	arvoreMinima += "Custo total da árvore: "+custo+"\n";
     	return arvoreMinima;
