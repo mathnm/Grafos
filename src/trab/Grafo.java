@@ -309,15 +309,15 @@ public class Grafo {
     		if((!conjVertices.contains(arestas.get(i).origem) || !conjVertices.contains(arestas.get(i).destino))) {
 				arestas.get(i).origem.conjVertice.addAll(arestas.get(i).destino.conjVertice); //adiciona o vértice destino ao conjunto do vertice da origem
 				arestas.get(i).destino.conjVertice.addAll(arestas.get(i).origem.conjVertice); //adiciona o vértice origem ao conjunto do vertice do destino
-				conjVertices.add(arestas.get(i).origem);
-				conjVertices.add(arestas.get(i).destino);
+				conjVertices.addAll(arestas.get(i).origem.conjVertice);
+				conjVertices.addAll(arestas.get(i).destino.conjVertice);
 				arvoreMinima += arestas.get(i).origem.nome+" -> "+ arestas.get(i).destino.nome + "\n";
 				custo += arestas.get(i).valor;
-			}else if(arestas.get(i).origem.conjVertice.equals(arestas.get(i).destino.conjVertice)) {
+			}else if(!arestas.get(i).origem.conjVertice.equals(arestas.get(i).destino.conjVertice)) {
 				arestas.get(i).origem.conjVertice.addAll(arestas.get(i).destino.conjVertice); //adiciona o vértice destino ao conjunto do vertice da origem
 				arestas.get(i).destino.conjVertice.addAll(arestas.get(i).origem.conjVertice); //adiciona o vértice origem ao conjunto do vertice do destino
-				conjVertices.add(arestas.get(i).origem);
-				conjVertices.add(arestas.get(i).destino);
+				conjVertices.addAll(arestas.get(i).origem.conjVertice);
+				conjVertices.addAll(arestas.get(i).destino.conjVertice);
 				arvoreMinima += arestas.get(i).origem.nome+" -> "+ arestas.get(i).destino.nome + "\n";
 				custo += arestas.get(i).valor;
     		}
